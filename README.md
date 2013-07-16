@@ -12,12 +12,12 @@
 
 ### 実行サンプル
 - [@yootakuti](https://twitter.com/yootakuti)
-- markov.rbを30分に1回、reply.rbを5分に1回実行してる
+- markov.rbを30分に1回~~、reply.rbを5分に1回~~実行してる
 
 ## About Reply
 - 最初だけ、botアカウントのmentionsのうち最新のもの1ツイートのIDをlatest_mention_id.txtに書き込んであげる
 - mentionsが1つもない場合は0でも入れておく
-- 以後実行する度に自動的にアップデートされる
+- 以後 `ruby reply.rb` を実行する度に自動的にアップデートされる
 
 **latest\_mention\_id.txtの中身の例**
 `356989334773170176`
