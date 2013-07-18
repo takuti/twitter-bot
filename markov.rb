@@ -28,17 +28,16 @@ class Markov
 			wakati_array << END_FLG
 
 			# 要素は最低4つあれば[BEGIN]で始まるものと[END]で終わるものの2つが作れる　
-			if wakati_array.size >= 4
-				i = 0
-				loop do
-					@markov_table[markov_index] = Array.new
-					@markov_table[markov_index] << wakati_array[i]
-					@markov_table[markov_index] << wakati_array[i+1]
-					@markov_table[markov_index] << wakati_array[i+2]
-					markov_index += 1
-					break if wakati_array[i+2] == END_FLG
-					i += 1
-				end
+			next if wakati_array.size < 4
+			i = 0
+			loop do
+				@markov_table[markov_index] = Array.new
+				@markov_table[markov_index] << wakati_array[i]
+				@markov_table[markov_index] << wakati_array[i+1]
+				@markov_table[markov_index] << wakati_array[i+2]
+				markov_index += 1
+				break if wakati_array[i+2] == END_FLG
+				i += 1
 			end
 		end
 	end
@@ -77,5 +76,3 @@ class Markov
 		markov_tweet
 	end
 end
-
-
