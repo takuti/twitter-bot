@@ -12,7 +12,7 @@
 
 ### 実行サンプル
 - [@yootakuti](https://twitter.com/yootakuti)
-- markov.rbを30分に1回~~、reply.rbを5分に1回~~実行してる
+- markov.rbを30分に1回実行してる
 
 ## About Reply
 - 最初だけ、botアカウントのmentionsのうち最新のもの1ツイートのIDをlatest_mention_id.txtに書き込んであげる
