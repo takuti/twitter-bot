@@ -12,5 +12,5 @@ end
 
 markov = Markov.new
 
-Twitter.update(markov_tweet)
-puts '[tweet] ' + markov.generate_tweet
+# Twitter.update(markov_tweet)
+puts "[tweet] #{markov.generate_tweet}"

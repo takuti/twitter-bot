@@ -21,7 +21,7 @@ Twitter.mentions.each do |status|
 		reply_targets << status.id
 		reply = '@' + status.user.screen_name + ' ' + markov.generate_tweet
 		Twitter.update(reply, { "in_reply_to_status_id" => status.id })
-		puts '[reply] ' + reply
+		puts "[reply] #{reply}"
 	end
 end
 
