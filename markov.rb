@@ -2,6 +2,7 @@
 
 require 'igo-ruby'
 require 'csv'
+require 'nkf'
 
 BEGIN_FLG = '[BEGIN]'
 END_FLG = '[END]'
@@ -18,6 +19,8 @@ class Markov
 		# 形態素3つずつから成るテーブルを生成
 		@tweets_table[:text].each do |tweet|
 			tweet = tweet.to_s # 数字だけのツイートでunpack('U*')がエラーを吐くので全てtoString
+			next if NKF.guess(tweet) != NKF::UTF8
+
 			tweet = tweet.gsub(/^\.?(\s*@[0-9A-Za-z_]+)+/, '')	# 文頭のIDを削除 .をつけていても削除 複数人指定も削除
 			tweet = tweet.gsub(/(RT|QT)\s*@?[0-9A-Za-z_]+.*$/, '')	# RT/QT以降行末まで削除
 			tweet = tweet.gsub(/http:\/\/\S+/, '')	# URLを削除 スペースが入るまで消える
