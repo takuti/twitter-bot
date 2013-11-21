@@ -1,23 +1,21 @@
 # coding: utf-8
 
 require 'igo-ruby'
-require 'csv'
 require 'nkf'
 
 BEGIN_FLG = '[BEGIN]'
 END_FLG = '[END]'
 
 class Markov
-	def initialize
+	def initialize(tweets)
 		@tagger = Igo::Tagger.new('./ipadic')
-		@tweets_table = CSV.table('tweets/tweets.csv')
 
 		# 3階のマルコフ連鎖
 		@markov_table = Array.new
 		markov_index = 0
 
 		# 形態素3つずつから成るテーブルを生成
-		@tweets_table[:text].each do |tweet|
+		tweets.each do |tweet|
 			tweet = tweet.to_s # 数字だけのツイートでunpack('U*')がエラーを吐くので全てtoString
 			next if NKF.guess(tweet) != NKF::UTF8
 

@@ -1,6 +1,7 @@
 # coding: utf-8
 
 require 'twitter'
+require 'csv'
 require_relative 'markov'
 
 Twitter.configure do |config|
@@ -10,7 +11,8 @@ Twitter.configure do |config|
 	config.oauth_token_secret = YOUR_OAUTH_TOKEN_SECRET
 end
 
-markov = Markov.new
+tweets_table = CSV.table('tweets/tweets.csv')
+markov = Markov.new(tweets_table[:text])
 
 # Twitter.update(markov_tweet)
 puts "[tweet] #{markov.generate_tweet}"
