@@ -1,6 +1,6 @@
 This is twitter bot program using Markov Chain.
 
-[twitter bot development using Markov Chain](http://blog.takuti.me/twitter-bot/) (Japanese)
+[Twitter Bot Development using Markov Chain - blog.takuti.me](http://blog.takuti.me/twitter-bot/) (Japanese)
 
 ## Usage
 1. Download your tweet history from twitter setting page. **tweet.rb** uses CSV file of your tweet history.
