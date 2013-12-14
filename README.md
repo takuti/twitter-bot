@@ -1,25 +1,26 @@
-This is twitter bot program using Markov Chain.
+This is twitter bot program by Markov Chain.
 
-[Twitter Bot Development using Markov Chain - blog.takuti.me](http://blog.takuti.me/twitter-bot/) (Japanese)
+[Twitter Bot Development by Markov Chain - blog.takuti.me](http://blog.takuti.me/twitter-bot/) (Japanese)
 
-## Usage
-1. Download your tweet history from twitter setting page. **tweet.rb** uses CSV file of your tweet history.
-2. Install [igo-ruby](https://github.com/kyow/igo-ruby).
-3. Install [Twitter Ruby Gem](https://github.com/sferik/twitter).
-4. Run `ruby tweet.rb`
+## Tweet Flow
+1. Construct Markov table from my tweet history that is downloaded from twitter official. (Using only CSV file in the tweet history.
+	- Using [igo-ruby](https://github.com/kyow/igo-ruby) to do morphological analysis.
+2. Generate tweet by Markov Chain.
+3. Tweet using [Twitter Ruby Gem](https://github.com/sferik/twitter).
+
+## Reply Daemon
+- reply.rb is using Streaming of Twitter Ruby Gem. It's experimental function.
+- Run daemon `ruby reply.rb`
+- Stop daemon `cat reply_daemon.pid | xargs kill`
+	- reply_daemon.pid is created automatically when you run daemon.
+- Reference: [http://nuke.hateblo.jp/entry/2013/07/04/090917](http://nuke.hateblo.jp/entry/2013/07/04/090917)
 
 ### Sample
 - [@yootakuti](https://twitter.com/yootakuti)
 - Running `ruby tweet.rb` every 30 minutes.
-
-## Reply (this is incomplete function)
-- First time, you should make one text file that is called **latest\_mention\_id.txt**. It memorizes latest reply tweet ID at previous step.
-- If you have no mentions, please input 0 to **latest\_mention\_id.txt**.
-- After second time, **latest_mention_id.txt** is updated automatically when run `ruby reply.rb`.
-
-Example of **latest\_mention\_id.txt** content is -> `356989334773170176`
+- Running reply daemon. If you send mention, this guy reply to you.
 
 ## TODO
 - Get newer tweet history automatically.
-- Implement reply function completely.
 - Improve performance. (taking a minute for 50,000 tweets currently)
+- Do humanlike tweet.
