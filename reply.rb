@@ -33,6 +33,7 @@ class ReplyDaemon
 		tweets_table = CSV.table('data/tweets/tweets.csv')
 		@markov = Markov.new(tweets_table[:text])
 		@pid_file_path = './reply_daemon.pid'
+		@error_log_path = './reply_error.log'
 
 		puts 'Finish initialization.'
 	end
@@ -46,9 +47,10 @@ class ReplyDaemon
 			  	@rest.update(reply, { 'in_reply_to_status_id' => object.id })
 			  end
 			end
-		rescue
+		rescue => ex
+			open(@error_log_path, 'w') {|f| f << ex } if @error_log_path
 			# When something error occured, tell it by replying to admin
-			@rest.update('@' + ADMIN_SCREEN_NAME + ' HELP ME!!!')
+			@rest.update('@' + ADMIN_SCREEN_NAME + ' ')
 		end
 	end
 
