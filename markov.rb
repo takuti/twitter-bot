@@ -19,9 +19,10 @@ class Markov
 			tweet = tweet.to_s # 数字だけのツイートでunpack('U*')がエラーを吐くので全てtoString
 			next if NKF.guess(tweet) != NKF::UTF8
 
-			tweet = tweet.gsub(/^\.?(\s*@[0-9A-Za-z_]+)+/, '')	# 文頭のIDを削除 .をつけていても削除 複数人指定も削除
+			tweet = tweet.gsub(/\.?\s*@[0-9A-Za-z_]+/, '')	# リプライをすべて削除
 			tweet = tweet.gsub(/(RT|QT)\s*@?[0-9A-Za-z_]+.*$/, '')	# RT/QT以降行末まで削除
 			tweet = tweet.gsub(/http:\/\/\S+/, '')	# URLを削除 スペースが入るまで消える
+			tweet = tweet.gsub(/#[0-9A-Za-z_]+/, '')	# ハッシュタグを削除
 
 			wakati_array = Array.new
 			wakati_array << BEGIN_FLG
