@@ -45,7 +45,7 @@ class Markov
 	end
 
 	def generate_tweet
-		for times in 1..10
+		while true
 			# 先頭（[BEGIN]から始まるもの）を選択
 			selected_array = Array.new
 			@markov_table.each do |markov_array|
