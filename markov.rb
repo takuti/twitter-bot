@@ -2,6 +2,8 @@
 
 require 'igo-ruby'
 require 'nkf'
+require 'open-uri'
+require 'json'
 
 BEGIN_FLG = '[BEGIN]'
 END_FLG = '[END]'
@@ -55,7 +57,6 @@ class Markov
 			end
 			selected = selected_array.sample
 			markov_tweet = selected[1] + selected[2]
-
 			# 以後、[END]で終わるものを拾うまで連鎖を続ける
 			loop do
 				selected_array = Array.new
@@ -73,8 +74,24 @@ class Markov
 					markov_tweet += selected[1] + selected[2]
 				end
 			end
-			break if markov_tweet.size <= 140 # 140文字以内の文章が生成できれば終了　最大10回までやり直す
+			# If generated tweet size is greater than 100, tweet random Kaomoji
+			if markov_tweet.size > 100
+				begin
+					markov_tweet = get_kaomoji
+					break
+				rescue
+					next
+				end
+			else
+				break
+			end
 		end
 		markov_tweet
+	end
+
+	def get_kaomoji
+		open('http://kaomoji.n-at.me/random.json') do |f|
+			JSON.load(f)['record']['text']
+		end
 	end
 end

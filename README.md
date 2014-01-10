@@ -15,6 +15,9 @@ This is twitter bot program by Markov Chain.
 	- reply_daemon.pid is created automatically when you run daemon.
 - Reference: [http://nuke.hateblo.jp/entry/2013/07/04/090917](http://nuke.hateblo.jp/entry/2013/07/04/090917)
 
+## Additional Feature
+- If generated tweet size is greater than 100, tweet random Kaomoji. To get random Kaomoji, using API of kaomoji.html [HERE](https://github.com/tatat/kaomoji.html)
+
 ### Sample
 - [@yootakuti](https://twitter.com/yootakuti)
 - Running `ruby tweet.rb` every 30 minutes.
