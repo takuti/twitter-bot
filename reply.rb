@@ -48,7 +48,7 @@ class ReplyDaemon
 			  end
 			end
 		rescue => ex
-			open(@error_log_path, 'w') {|f| f << ex } if @error_log_path
+			open(@error_log_path, 'w') {|f| f.puts(ex.backtrace) f.puts(ex.message) f.puts('')} if @error_log_path
 			# When something error occured, tell it by replying to admin
 			@rest.update('@' + ADMIN_SCREEN_NAME + ' ')
 		end
