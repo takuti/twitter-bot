@@ -27,9 +27,6 @@ def create_markov_table(tweets)
 
   # 形態素3つずつから成るテーブルを生成
   tweets.each do |tweet|
-    tweet = normalize_tweet(tweet)
-    next if !tweet
-
     wakati_array = Array.new
     wakati_array << BEGIN_FLG
     wakati_array += tagger.wakati(tweet)

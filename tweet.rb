@@ -6,7 +6,9 @@ require_relative 'markov'
 
 tweets_table = Array.new
 CSV.foreach('data/tweets/tweets.csv', :headers => true) do |row|
-  tweets_table << row['text']
+  tweet = normalize_tweet(row['text'])
+  next if !tweet
+  tweets_table << tweet
 end
 
 markov_table = create_markov_table(tweets_table)
