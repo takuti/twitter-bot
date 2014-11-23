@@ -12,7 +12,7 @@ rest = Twitter::REST::Client.new do |config|
 end
 
 tweets_table = CSV.table('data/tweets/tweets.csv')
-markov = Markov.new(tweets_table[:text])
+markov_table = create_markov_table(tweets_table[:text])
 
-# rest.update(markov.generate_tweet)
-puts "[tweet] #{markov.generate_tweet}"
+# rest.update(generate_tweet(markov_table))
+puts "[tweet] #{generate_tweet(markov_table)}"
