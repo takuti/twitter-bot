@@ -36,10 +36,7 @@ def create_markov_table(tweets)
     next if wakati_array.size < 4
     i = 0
     loop do
-      markov_table[markov_index] = Array.new
-      markov_table[markov_index] << wakati_array[i]
-      markov_table[markov_index] << wakati_array[i+1]
-      markov_table[markov_index] << wakati_array[i+2]
+      markov_table[markov_index] = wakati_array[i..(i+2)]
       markov_index += 1
       break if wakati_array[i+2] == END_FLG
       i += 1
