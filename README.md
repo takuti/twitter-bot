@@ -1,10 +1,10 @@
-***Sorry, this project is strongly optimized for Japanese tweets. So, README and comments in the source code are written in Japanese :sushi:***
+***Sorry, since this project is strongly optimized for Japanese tweets, README and comments in the source code are written in Japanese :sushi:***
 
 ## なにこれ
 
 - 過去ツイートからマルコフ連鎖でツイートを生成します
 - サンプル：[@yootakuti](https://twitter.com/yootakuti)
-- 解説：[マルコフ連鎖でTwitter Botをつくりました - blog.takuti.me](http://blog.takuti.me/twitter-bot/) 
+- 解説：[マルコフ連鎖でTwitter Botをつくりました - blog.takuti.me](http://blog.takuti.me/twitter-bot/)
 
 ## 使い方
 
