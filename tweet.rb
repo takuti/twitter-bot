@@ -4,8 +4,12 @@ require 'twitter'
 require 'csv'
 require_relative 'markov'
 
-tweets_table = CSV.table('data/tweets/tweets.csv')
-markov_table = create_markov_table(tweets_table[:text])
+tweets_table = Array.new
+CSV.foreach('data/tweets/tweets.csv', :headers => true) do |row|
+  tweets_table << row['text']
+end
+
+markov_table = create_markov_table(tweets_table)
 
 if ARGV[0] == 'production'
   rest = Twitter::REST::Client.new do |config|
