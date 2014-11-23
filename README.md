@@ -1,4 +1,4 @@
-***Sorry, this project is strongly optimized for Japanese tweets. So, README and comments in the source code are written in Japanese :(***
+***Sorry, this project is strongly optimized for Japanese tweets. So, README and comments in the source code are written in Japanese :sushi:***
 
 ## なにこれ
 
