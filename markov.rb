@@ -8,6 +8,16 @@ require 'json'
 BEGIN_FLG = '[BEGIN]'
 END_FLG = '[END]'
 
+def normalize_tweet(tweet)
+  tweet = tweet.to_s # 数字だけのツイートでunpack('U*')がエラーを吐くので全てtoString
+  return nil if NKF.guess(tweet) != NKF::UTF8
+  tweet.gsub!(/\.?\s*@[0-9A-Za-z_]+/, '')  # リプライをすべて削除
+  tweet.gsub!(/(RT|QT)\s*@?[0-9A-Za-z_]+.*$/, '')  # RT/QT以降行末まで削除
+  tweet.gsub!(/http:\/\/\S+/, '')  # URLを削除 スペースが入るまで消える
+  tweet.gsub!(/#[0-9A-Za-z_]+/, '')  # ハッシュタグを削除
+  tweet
+end
+
 def create_markov_table(tweets)
   tagger = Igo::Tagger.new('./ipadic')
 
@@ -17,13 +27,8 @@ def create_markov_table(tweets)
 
   # 形態素3つずつから成るテーブルを生成
   tweets.each do |tweet|
-    tweet = tweet.to_s # 数字だけのツイートでunpack('U*')がエラーを吐くので全てtoString
-    next if NKF.guess(tweet) != NKF::UTF8
-
-    tweet = tweet.gsub(/\.?\s*@[0-9A-Za-z_]+/, '')  # リプライをすべて削除
-    tweet = tweet.gsub(/(RT|QT)\s*@?[0-9A-Za-z_]+.*$/, '')  # RT/QT以降行末まで削除
-    tweet = tweet.gsub(/http:\/\/\S+/, '')  # URLを削除 スペースが入るまで消える
-    tweet = tweet.gsub(/#[0-9A-Za-z_]+/, '')  # ハッシュタグを削除
+    tweet = normalize_tweet(tweet)
+    next if !tweet
 
     wakati_array = Array.new
     wakati_array << BEGIN_FLG
