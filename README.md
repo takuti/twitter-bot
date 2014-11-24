@@ -1,39 +1,39 @@
-***Sorry, since this project is strongly optimized for Japanese tweets, README and comments in the source code are written in Japanese :sushi:***
+***Since this project is strongly optimized for Japanese, other languages are not supported :sushi:***
 
-## なにこれ
+## What's this?
 
-- 過去ツイートからマルコフ連鎖でツイートを生成します
-- サンプル：[@yootakuti](https://twitter.com/yootakuti)
-- 解説：[マルコフ連鎖でTwitter Botをつくりました - blog.takuti.me](http://blog.takuti.me/twitter-bot/)
+- Generate tweet based on so-called **Markov Chain** from particular user's tweet history
+- Sample: [@yootakuti](https://twitter.com/yootakuti)
+- My Japanese article: [マルコフ連鎖でTwitter Botをつくりました - blog.takuti.me](http://blog.takuti.me/twitter-bot/)
 
-## 使い方
+## How to use
 
-1. Twitter公式から過去ツイートをダウンロード
-	- ディレクトリ **data/** に配置
-	- **data/tweets/tweets.csv** の *text* カラムを使う
-2. 形態素解析用に [igo-ruby](https://github.com/kyow/igo-ruby) を準備
-	- 辞書のディレクトリは **ipadic/**
-3. ツイート生成/投稿
-	- とりあえず1つ生成してみたい場合は `ruby main.rb`
-	- 投稿したい場合は **main.rb** でキーとか書いて `ruby main.rb production`
+1. Download tweet history from your Twitter setting page
+	- The folder must be placed under **data/**
+	- The program will use *text* column of **data/tweets/tweets.csv**
+2. Install [igo-ruby](https://github.com/kyow/igo-ruby) (Japanese morphological analysis library)
+	- Dictionary's directory: **ipadic/**
+3. Generate/Post tweet
+	- Just generate: `ruby main.rb`
+	- Post: write API keys in **main.rb**, and `ruby main.rb production`
 
-## リプライ
+## Reply
 
-***開発中なのでまだ正しく動作しません***
+***This feature is still-under-construction***
 
-- **reply.rb** は [Twitter Ruby Gem](https://github.com/sferik/twitter) のストリーミング機能で自分宛てのリプライを拾ってツイート生成して返信する
-- デーモン
-	- 起動：`ruby reply.rb`
-	- 終了：`cat reply_daemon.pid | xargs kill`
-	- **reply_daemon.pid** はデーモン起動時に自動で作成される
-	- 参考：[http://nuke.hateblo.jp/entry/2013/07/04/090917](http://nuke.hateblo.jp/entry/2013/07/04/090917)
+- **reply.rb** can answer to replies found on your timeline
+- Daemon
+	- Run: `ruby reply.rb`
+	- Stop: `cat reply_daemon.pid | xargs kill`
+	- A file **reply_daemon.pid** will be generated automatically
+	- Reference: [http://nuke.hateblo.jp/entry/2013/07/04/090917](http://nuke.hateblo.jp/entry/2013/07/04/090917)
 
-## おまけ
+## Additional feature
 
-生成されたツイートの文字数が100文字を超えた場合、長すぎてグダグダな文章になるので代わりに顔文字を投稿します。[kaomoji.html](https://github.com/tatat/kaomoji.html) のAPIを使っています。
+If generated tweet's length is greater than 100, the bot will post Kaomoji from [kaomoji.html](https://github.com/tatat/kaomoji.html) API because long tweets do not make sense.
 
 ## TODO
 
-- ツイート生成の度に1から（形態素解析から）処理を行なっているので毎回1分くらい時間がかかってムダ
-- もっと人間っぽいツイートの生成
-- リプライ機能ちゃんと実装する
+- Improve performance (Currently, the program does A-to-Z of the tweet generation every time)
+- More humanlike tweet
+- Implement reply feature
