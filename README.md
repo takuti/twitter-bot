@@ -1,6 +1,8 @@
 ***Since this project is strongly optimized for Japanese, other languages are not supported :sushi:***
 
-## What's this?
+[![Build Status](https://travis-ci.org/takuti/twitter-bot.svg)](https://travis-ci.org/takuti/twitter-bot)
+
+## What's this? 
 
 - Generate tweet based on so-called **Markov Chain** from particular user's tweet history
 - Sample: [@yootakuti](https://twitter.com/yootakuti)
