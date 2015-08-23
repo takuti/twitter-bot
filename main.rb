@@ -5,15 +5,16 @@ require 'csv'
 require_relative 'markov'
 
 # read tweets from official tweet history
-tweets_table = Array.new
+tweets = Array.new
 CSV.foreach('data/tweets/tweets.csv', :headers => true) do |row|
-  tweet = normalize_tweet(row['text'])
-  next if !tweet
-  tweets_table << tweet
+  tweet = Tweet.new(row['text'])
+  next if !tweet.text
+  tweet.normalize
+  tweets << tweet
 end
 
 # create markov table which has all 3-grams based on the tweets table
-markov_table = create_markov_table(tweets_table)
+markov_table = create_markov_table(tweets)
 
 # generate and tweet on twitter: `$ ruby main.rb production`
 # just generate tweet: `$ ruby main.rb`
