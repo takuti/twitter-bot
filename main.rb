@@ -14,7 +14,7 @@ CSV.foreach('data/tweets/tweets.csv', :headers => true) do |row|
 end
 
 # create markov table which has all 3-grams based on the tweets table
-markov_table = create_markov_table(tweets)
+markov = Markov.new(tweets)
 
 # generate and tweet on twitter: `$ ruby main.rb production`
 # just generate tweet: `$ ruby main.rb`
@@ -25,7 +25,7 @@ if ARGV[0] == 'production'
     config.oauth_token = YOUR_OAUTH_TOKEN
     config.oauth_token_secret = YOUR_OAUTH_TOKEN_SECRET
   end
-  rest.update(generate_tweet(markov_table))
+  rest.update(markov.generate)
 else
-  puts "[tweet] #{generate_tweet(markov_table)}"
+  puts "[tweet] #{markov.generate}"
 end
