@@ -2,6 +2,8 @@
 
 require 'twitter'
 require 'csv'
+
+require_relative 'tweet'
 require_relative 'markov'
 
 # read tweets from official tweet history
