@@ -21,7 +21,7 @@ class Markov
     tweets.each do |tweet|
       wakati_array = tweet.wakati(tagger)
 
-      # 要素は最低4つあれば[BEGIN]で始まるものと[END]で終わるものの2つが作れる　
+      # 要素は最低4つあれば[BEGIN]で始まるものと[END]で終わるものの2つが作れる
       next if wakati_array.size < 4
       i = 0
       loop do
