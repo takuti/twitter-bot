@@ -1,7 +1,18 @@
 language: ruby
 
 rvm:
-  - 2.0.0
+  - 2.2.3
+
+before_script:
+  - wget 'http://osdn.jp/frs/redir.php?m=jaist&f=%2Figo%2F52344%2Figo-0.4.3.jar' -O igo.jar
+  - wget 'https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7MWVlSDBCSXZMTXM' -O mecab-ipadic.tar.gz
+  - tar zxfv mecab-ipadic.tar.gz
+  - java -cp igo.jar net.reduls.igo.bin.BuildDic ipadic mecab-ipadic-2.7.0-20070801 EUC-JP
+  - wget https://dl.dropboxusercontent.com/u/4844005/data_takuti.zip
+  - unzip data_takuti.zip
+
+script:
+  - bundle exec rake
 
 branches:
   only:
