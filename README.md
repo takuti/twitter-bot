@@ -16,7 +16,7 @@ Markov Chain-based Japanese Twitter Bot
 1. Download tweet history from your Twitter setting page
 	- The folder must be placed under **data/**.
 	- The program will use *text* column of **data/tweets/tweets.csv**.
-2. Install [igo-ruby](https://github.com/kyow/igo-ruby) (Japanese morphological analysis library)
+2. Install [kusari](https://github.com/takuti/kusari) (Japanese Markov chain library)
 	- You must create dictionary as follows: http://igo.osdn.jp/index.html#usage.
 	- If the dictionary has been successfully created, now we have **ipadic/** directory.
 3. Generate/Post tweet

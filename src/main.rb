@@ -1,10 +1,21 @@
 # coding: utf-8
 
 require 'twitter'
+require 'kusari'
 require 'csv'
 
 require_relative 'tweet'
-require_relative 'markov'
+
+def get_kaomoji
+  require 'open-uri'
+  require 'json'
+
+  open('http://kaomoji.n-at.me/random.json') do |f|
+    JSON.load(f)['record']['text']
+  end
+end
+
+generator = Kusari::Generator.new
 
 # read tweets from official tweet history
 tweets = Array.new
@@ -12,11 +23,16 @@ CSV.foreach('data/tweets/tweets.csv', :headers => true) do |row|
   tweet = Tweet.new(row['text'])
   next if !tweet.text
   tweet.normalize
-  tweets << tweet
+  generator.add_string(tweet.text)
 end
 
-# create markov table which has all 3-grams based on the tweets table
-markov = Markov.new(tweets)
+tweet = generator.generate(140)
+
+if tweet.length > 100
+  begin
+    tweet = get_kaomoji
+  end
+end
 
 # generate and tweet on twitter: `$ ruby main.rb production`
 # just generate tweet: `$ ruby main.rb`
@@ -27,7 +43,7 @@ if ARGV[0] == 'production'
     config.oauth_token = YOUR_OAUTH_TOKEN
     config.oauth_token_secret = YOUR_OAUTH_TOKEN_SECRET
   end
-  rest.update(markov.generate)
+  rest.update(tweet)
 else
-  puts "[tweet] #{markov.generate}"
+  puts "[tweet] #{tweet}"
 end
