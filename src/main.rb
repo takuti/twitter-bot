@@ -17,13 +17,16 @@ end
 
 generator = Kusari::Generator.new
 
-# read tweets from official tweet history
-tweets = Array.new
-CSV.foreach('data/tweets/tweets.csv', :headers => true) do |row|
-  tweet = Tweet.new(row['text'])
-  next if !tweet.text
-  tweet.normalize
-  generator.add_string(tweet.text)
+if not generator.load('./tweet.markov')
+  # read tweets from official tweet history
+  tweets = Array.new
+  CSV.foreach('data/tweets/tweets.csv', :headers => true) do |row|
+    tweet = Tweet.new(row['text'])
+    next if !tweet.text
+    tweet.normalize
+    generator.add_string(tweet.text)
+  end
+  generator.save('./tweet.markov')
 end
 
 tweet = generator.generate(140)
