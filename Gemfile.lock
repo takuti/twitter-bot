@@ -19,10 +19,12 @@ GEM
     http_parser.rb (0.6.0)
     igo-ruby (0.1.5)
     json (1.8.3)
-    kusari (0.1.0)
+    kusari (0.2.0)
       igo-ruby (~> 0.1.5)
+      msgpack
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
+    msgpack (0.7.1)
     multipart-post (2.0.0)
     naught (1.1.0)
     rake (10.4.2)
@@ -48,7 +50,7 @@ PLATFORMS
 
 DEPENDENCIES
   json (= 1.8.3)
-  kusari (= 0.1.0)
+  kusari (= 0.2.0)
   rake (= 10.4.2)
   twitter (= 5.15.0)
 
