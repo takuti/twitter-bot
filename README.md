@@ -11,27 +11,42 @@ Markov Chain-based Japanese Twitter Bot
 - Sample: [@yootakuti](https://twitter.com/yootakuti)
 - My Japanese article: [マルコフ連鎖でTwitter Botをつくりました | takuti.me](http://takuti.me/note/twitter-bot/)
 
+## Installation
+
+After cloning this repository,
+
+	$ gem install bundle
+	$ bundle install
+	$ rake setup
+
+Note that the Markov chain logic is implemented by ***[kusari](https://github.com/takuti/kusari)***, a gem for Japanese Markov chain. The above `rake setup` command will automatically accomplish to create the required dictionary **ipadic/** by following the installation written in [HERE](http://igo.osdn.jp/index.html#usage).
+
 ## Usage
 
-1. Download tweet history from your Twitter setting page
-	- The folder must be placed under **data/**.
-	- The program will use *text* column of **data/tweets/tweets.csv**.
-2. Install [kusari](https://github.com/takuti/kusari) (Japanese Markov chain library)
-	- You must create dictionary as follows: http://igo.osdn.jp/index.html#usage.
-	- If the dictionary has been successfully created, now we have **ipadic/** directory.
-3. Generate/Post tweet
-	- Just generate: `ruby src/main.rb`
-	- Post: write API keys in **main.rb**, and `ruby src/main.rb production`
+Before enjoying this bot, you must download your tweet history from [the Twitter setting page](https://twitter.com/settings/account). The downloaded folder must be placed under **data/**, and the bot will use *text* column of **data/tweets/tweets.csv**.
 
-If the length of generated tweet is greater than 100, this bot will post Kaomoji from [kaomoji.html](https://github.com/tatat/kaomoji.html) API because long tweets do not make sense.
+### Just generate a random tweet
 
-## Dependencies
+	$ ruby src/main.rb
+	
+### Post on Twitter
 
-See `Gemfile`
+After replacing the mock Twitter API keys with your actual ones in **src/main.rb**,
+
+	$ ruby src/main.rb production
+	
+### Hourly post by cron
+
+Set your crontab as:
+
+	$ echo "01 * * * * /usr/local/rvm/wrappers/ruby-2.2.3/ruby /path/to/twitter-bot/src/main.rb production" > cron.txt
+	$ crontab cron.txt
+
+For more detail of RVM+cron setting: [RVM: Ruby Version Manager - Using Cron with RVM](https://rvm.io/deployment/cron)
 
 ## TODO
 
-- [ ] Improve performance (e.g. store tweets on DB)
+- [x] Improve performance (e.g. store tweets on DB)
 - [ ] Realize more humanlike tweet
 - [ ] Implement reply feature
 - [ ] Incorporate streaming API-based tweet generating logic
