@@ -15,18 +15,18 @@ def get_kaomoji
   end
 end
 
-generator = Kusari::Generator.new
+generator = Kusari::Generator.new(3, File.expand_path('../../ipadic', __FILE__))
 
-if not generator.load('./tweet.markov')
+if not generator.load(File.expand_path('../../tweet.markov', __FILE__))
   # read tweets from official tweet history
   tweets = Array.new
-  CSV.foreach('data/tweets/tweets.csv', :headers => true) do |row|
+  CSV.foreach(File.expand_path('../../data/tweets/tweets.csv', __FILE__), :headers => true) do |row|
     tweet = Tweet.new(row['text'])
     next if !tweet.text
     tweet.normalize
     generator.add_string(tweet.text)
   end
-  generator.save('./tweet.markov')
+  generator.save(File.expand_path('../../tweet.markov', __FILE__))
 end
 
 tweet = generator.generate(140)
@@ -43,8 +43,8 @@ if ARGV[0] == 'production'
   rest = Twitter::REST::Client.new do |config|
     config.consumer_key = YOUR_CONSUMER_KEY
     config.consumer_secret = YOUR_CONSUMER_SECRET
-    config.oauth_token = YOUR_OAUTH_TOKEN
-    config.oauth_token_secret = YOUR_OAUTH_TOKEN_SECRET
+    config.access_token = YOUR_ACCESS_TOKEN
+    config.access_token_secret = YOUR_ACCESS_TOKEN_SECRET
   end
   rest.update(tweet)
 else
