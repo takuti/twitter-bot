@@ -23,32 +23,42 @@ Note that the Markov chain logic is implemented by ***[kusari](https://github.co
 
 ## Usage
 
-Before enjoying this bot, you must download your tweet history from [the Twitter setting page](https://twitter.com/settings/account). The downloaded folder must be placed under **data/**, and the bot will use *text* column of **data/tweets/tweets.csv**.
+Before enjoying this bot, you must download your tweet history from [the Twitter setting page](https://twitter.com/settings/account). The downloaded folder must be placed under **/path/to/twitter-bot/data/**, and the bot will use *text* column of **data/tweets/tweets.csv**.
 
 ### Just generate a random tweet
 
-	$ ruby src/main.rb
+	$ ruby lib/post_tweet.rb dry-run
 	
 ### Post on Twitter
 
-After replacing the mock Twitter API keys with your actual ones in **src/main.rb**,
+After replacing the mock Twitter API keys with your actual ones in **lib/post_tweet.rb**,
 
-	$ ruby src/main.rb production
+	$ ruby lib/post_tweet.rb
 	
-### Hourly post by cron
+#### Hourly post by cron
 
 Set your crontab as:
 
-	$ echo "01 * * * * /usr/local/rvm/wrappers/ruby-2.2.3/ruby /path/to/twitter-bot/src/main.rb production" > cron.txt
+	$ echo "01 * * * * /usr/local/rvm/wrappers/ruby-2.2.3/ruby /path/to/twitter-bot/lib/post_tweet.rb" > cron.txt
 	$ crontab cron.txt
 
 For more detail of RVM+cron setting: [RVM: Ruby Version Manager - Using Cron with RVM](https://rvm.io/deployment/cron)
+
+### Reply daemon
+
+To track tweets which contain bot's SCREEN_NAME and reply all of them:
+
+	$ ruby lib/reply_daemon.rb start
+	
+Stop the process:
+
+	$ ruby lib/reply_daemon.rb stop
 
 ## TODO
 
 - [x] Improve performance (e.g. store tweets on DB)
 - [ ] Realize more humanlike tweet
-- [ ] Implement reply feature
+- [x] Implement reply feature
 - [ ] Incorporate streaming API-based tweet generating logic
 
 ## License
