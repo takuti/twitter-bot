@@ -4,9 +4,9 @@ require 'twitter'
 require 'kusari'
 require 'csv'
 
-require_relative 'tweet_generator'
+require_relative 'twitter_bot/tweet_generator'
 
-generator = TweetGenerator.new
+generator = TwitterBot::TweetGenerator.new
 
 # generate and tweet on twitter: `$ ruby main.rb production`
 # just generate tweet: `$ ruby main.rb`

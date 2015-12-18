@@ -4,7 +4,7 @@ require 'tweetstream'
 require 'twitter'
 require 'kusari'
 
-require_relative 'tweet_generator'
+require_relative 'twitter_bot/tweet_generator'
 
 # Since streaming feature of Twitter gem is still experimental,
 # TweetStream gem will be used to track tweets on stream
@@ -23,7 +23,7 @@ rest = Twitter::REST::Client.new do |config|
   config.access_token_secret = OAUTH_TOKEN_SECRET
 end
 
-generator = TweetGenerator.new
+generator = TwitterBot::TweetGenerator.new
 
 # non-daemonized tracking:
 # TweetStream::Client.new.track(SCREEN_NAME) do |status|
