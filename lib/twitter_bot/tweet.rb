@@ -11,7 +11,7 @@ module TwitterBot
       @text = nil if NKF.guess(@text) != NKF::UTF8
     end
 
-    def normalize
+    def normalize!
       @text.gsub!(/[^\u{0}-\u{FFFF}]/, '?') # 絵文字は ? に置換
       @text.gsub!(/\.?\s*@[0-9A-Za-z_]+/, '')  # リプライをすべて削除
       @text.gsub!(/(RT|QT)\s*@?[0-9A-Za-z_]+.*$/, '')  # RT/QT以降行末まで削除
