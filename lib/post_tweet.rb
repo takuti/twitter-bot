@@ -1,8 +1,6 @@
 # coding: utf-8
 
 require 'twitter'
-require 'kusari'
-
 require_relative 'twitter_bot/tweet_generator'
 
 generator = TwitterBot::TweetGenerator.new

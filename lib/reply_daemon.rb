@@ -2,8 +2,6 @@
 
 require 'tweetstream'
 require 'twitter'
-require 'kusari'
-
 require_relative 'twitter_bot/tweet_generator'
 
 # Since streaming feature of Twitter gem is still experimental,
