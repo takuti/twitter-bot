@@ -3,10 +3,6 @@ language: ruby
 rvm:
   - 2.2.3
 
-before_script:
-  - wget https://dl.dropboxusercontent.com/u/4844005/data_takuti.zip
-  - unzip data_takuti.zip
-
 script:
   - bundle exec rake setup
   - bundle exec rake
