@@ -4,6 +4,10 @@ require 'moji'
 require 'igo-ruby'
 require 'nkf'
 
+def cost(word)
+  [-32768, 6000 - 200  * (word.length**1.3)].max.to_i
+end
+
 tagger = Igo::Tagger.new('../ipadic')
 cnt = 0
 
@@ -22,10 +26,9 @@ when 'hatena'
     next if tagger.wakati(word).size == 1 # すでに1単語として認識されるものは飛ばす\
 
     furigana = Moji.hira_to_kata(data[0])
-    cost = [-32768, (6000 - 200 *(word.length**1.3))].max.to_i
 
     # 文字コードがCP51932になってしまうものは飛ばす（応急処置）
-    dic_row_euc = NKF.nkf('-W -e',"#{word},0,0,#{cost},名詞,一般,*,*,*,*,#{word},#{furigana},#{furigana}")
+    dic_row_euc = NKF.nkf('-W -e',"#{word},0,0,#{cost(word)},名詞,一般,*,*,*,*,#{word},#{furigana},#{furigana}")
     if NKF.guess(dic_row_euc) == Encoding::CP51932
       puts "Skip word: #{word}"
     else
@@ -46,10 +49,8 @@ when 'wikipedia'
     next if word.include?(",") # 単語そのものにカンマが含まれるものは飛ばす（応急処置）
     next if tagger.wakati(word).size == 1 # すでに1単語として認識されるものは飛ばす\
 
-    cost = [-32768, (6000 - 200 *(word.length**1.3))].max.to_i
-
     # 文字コードがCP51932になってしまうものは飛ばす（応急処置）
-    dic_row_euc = NKF.nkf('-W -e',"#{word},0,0,#{cost},名詞,一般,*,*,*,*,#{word},,")
+    dic_row_euc = NKF.nkf('-W -e',"#{word},0,0,#{cost(word)},名詞,一般,*,*,*,*,#{word},,")
     if NKF.guess(dic_row_euc) == Encoding::CP51932
       puts "Skip word: #{word}"
     else
