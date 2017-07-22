@@ -2,7 +2,6 @@
 
 require 'moji'
 require 'igo-ruby'
-require 'nkf'
 require 'csv'
 
 def cost(word)
@@ -27,13 +26,8 @@ when 'hatena'
 
       furigana = row[0] ? Moji.hira_to_kata(row[0]) : String.new
 
-      # 文字コードがCP51932になってしまうものは飛ばす（応急処置）
-      if NKF.guess(word) == Encoding::CP51932
-        puts "Skip word: #{word}"
-      else
-        dictionary_file << [word, 0, 0, cost(word), '名詞', '一般', '*', '*', '*', '*', word, furigana, furigana]
-        cnt += 1
-      end
+      dictionary_file << [word, 0, 0, cost(word), '名詞', '一般', '*', '*', '*', '*', word, furigana, furigana]
+      cnt += 1
     end
   end
   dictionary_file.close
@@ -49,13 +43,8 @@ when 'wikipedia'
       next if word.include?(',') # 単語そのものにカンマが含まれるものは飛ばす（応急処置）
       next if tagger.wakati(word).size == 1 # すでに1単語として認識されるものは飛ば
 
-      # 文字コードがCP51932になってしまうものは飛ばす（応急処置）
-      if NKF.guess(word) == Encoding::CP51932
-        puts "Skip word: #{word}"
-      else
-        dictionary_file << [word, 0, 0, cost(word), '名詞', '一般', '*', '*', '*', '*', word, '*', '*']
-        cnt += 1
-      end
+      dictionary_file << [word, 0, 0, cost(word), '名詞', '一般', '*', '*', '*', '*', word, '*', '*']
+      cnt += 1
     end
   end
   dictionary_file.close
