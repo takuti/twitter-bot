@@ -8,13 +8,18 @@ def cost(word)
   [-32768, 6000 - 200  * (word.length**1.3)].max.to_i
 end
 
+if !['hatena', 'wikipedia'].include?(ARGV.first)
+  abort('`hatena` or `wikipedia` must be specified')
+end
+
 tagger = Igo::Tagger.new('../ipadic')
 cnt = 0
 
+# 元々のMeCab辞書のエンコーディングであるEUCに合わせる
+dictionary_file = CSV.open("#{ARGV.first}.csv", 'w', encoding: 'utf-8:euc-jp')
+
 case ARGV.first
 when 'hatena'
-  # 元々のMeCab辞書のエンコーディングであるEUCに合わせる
-  dictionary_file = CSV.open('hatena.csv', 'w', encoding: 'utf-8:euc-jp')
   File.open('keywordlist_furigana.csv', encoding: 'euc-jp:utf-8', undef: :replace) do |f|
     CSV.new(f, :col_sep => "\t").each do |row|
       word = row[1]
@@ -30,9 +35,7 @@ when 'hatena'
       cnt += 1
     end
   end
-  dictionary_file.close
 when 'wikipedia'
-  dictionary_file = CSV.open('wikipedia.csv', 'w', encoding: 'utf-8:euc-jp')
   File.open('jawiki-latest-all-titles', encoding: 'euc-jp:utf-8', undef: :replace) do |f|
     CSV.new(f, :col_sep => "\t").each do |row|
       word = row[0]
@@ -47,7 +50,8 @@ when 'wikipedia'
       cnt += 1
     end
   end
-  dictionary_file.close
 end
+
+dictionary_file.close
 
 puts "#{cnt}件の単語を登録しました"
