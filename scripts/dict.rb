@@ -36,7 +36,7 @@ when 'hatena'
     end
   end
 when 'wikipedia'
-  File.open('jawiki-latest-all-titles', encoding: 'euc-jp:utf-8', undef: :replace) do |f|
+  File.open('jawiki-latest-all-titles-in-ns0', encoding: 'euc-jp:utf-8', undef: :replace) do |f|
     CSV.new(f, :col_sep => "\t").each do |row|
       word = row[0]
 
