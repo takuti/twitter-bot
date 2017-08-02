@@ -4,11 +4,28 @@ require 'moji'
 require 'igo-ruby'
 require 'csv'
 
-def cost(word)
-  [-32768, 6000 - 200  * (word.length**1.3)].max.to_i
+class DictionaryWriter
+  def initialize(filename)
+    # 元々のMeCab辞書のエンコーディングであるEUCに合わせる
+    @dictionary_file = CSV.open(filename, 'w', encoding: 'utf-8:euc-jp')
+  end
+
+  def write(word, furigana='*')
+    @dictionary_file << [word, 0, 0, cost(word), '名詞', '一般', '*', '*', '*', '*', word, furigana, furigana]
+  end
+
+  def close
+    @dictionary_file.close
+  end
+
+  private
+
+  def cost(word)
+    [-32768, 6000 - 200  * (word.length**1.3)].max.to_i
+  end
 end
 
-def hatena(tagger, dictionary_file)
+def hatena(tagger, writer)
   cnt = 0
 
   File.open('keywordlist_furigana.csv', encoding: 'euc-jp:utf-8', undef: :replace) do |f|
@@ -21,8 +38,8 @@ def hatena(tagger, dictionary_file)
       next if tagger.wakati(word).size == 1 # すでに1単語として認識されるものは飛ばす
 
       furigana = row[0] ? Moji.hira_to_kata(row[0]) : String.new
+      writer.write(word, furigana)
 
-      dictionary_file << [word, 0, 0, cost(word), '名詞', '一般', '*', '*', '*', '*', word, furigana, furigana]
       cnt += 1
     end
   end
@@ -30,7 +47,7 @@ def hatena(tagger, dictionary_file)
   cnt
 end
 
-def wikipedia(tagger, dictionary_file)
+def wikipedia(tagger, writer)
   cnt = 0
 
   File.open('jawiki-latest-all-titles-in-ns0', encoding: 'euc-jp:utf-8', undef: :replace) do |f|
@@ -43,7 +60,8 @@ def wikipedia(tagger, dictionary_file)
       next if word.include?(',') # 単語そのものにカンマが含まれるものは飛ばす（応急処置）
       next if tagger.wakati(word).size == 1 # すでに1単語として認識されるものは飛ば
 
-      dictionary_file << [word, 0, 0, cost(word), '名詞', '一般', '*', '*', '*', '*', word, '*', '*']
+      writer.write(word)
+
       cnt += 1
     end
   end
@@ -56,17 +74,15 @@ if !['hatena', 'wikipedia'].include?(ARGV.first)
 end
 
 tagger = Igo::Tagger.new('../ipadic')
-
-# 元々のMeCab辞書のエンコーディングであるEUCに合わせる
-dictionary_file = CSV.open("#{ARGV.first}.csv", 'w', encoding: 'utf-8:euc-jp')
+writer = DictionaryWriter.new("#{ARGV.first}.csv")
 
 cnt = case ARGV.first
       when 'hatena'
-        hatena(tagger, dictionary_file)
+        hatena(tagger, writer)
       when 'wikipedia'
-        wikipedia(tagger, dictionary_file)
+        wikipedia(tagger, writer)
       end
 
-dictionary_file.close
+writer.close
 
 puts "#{cnt}件の単語を登録しました"
