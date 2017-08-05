@@ -7,13 +7,17 @@ require 'csv'
 module CustomDictionary
 
   class Writer
+    attr_accessor :count
+
     def initialize(filename)
       # 元々のMeCab辞書のエンコーディングであるEUCに合わせる
       @dictionary_file = CSV.open(filename, 'w', encoding: 'utf-8:euc-jp')
+      @count = 0
     end
 
     def write(word, furigana='*')
       @dictionary_file << [word, 0, 0, cost(word), '名詞', '一般', '*', '*', '*', '*', word, furigana, furigana]
+      @count += 1
     end
 
     def close
@@ -79,3 +83,5 @@ when 'wikipedia'
 end
 
 writer.close
+
+puts "Wrote #{writer.count} words"
