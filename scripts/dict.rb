@@ -29,8 +29,6 @@ module CustomDictionary
 
   class << self
     def hatena(tagger, writer)
-      cnt = 0
-
       File.open('keywordlist_furigana.csv', encoding: 'euc-jp:utf-8', undef: :replace) do |f|
         CSV.new(f, :col_sep => "\t").each do |row|
           word = row[1]
@@ -42,17 +40,11 @@ module CustomDictionary
 
           furigana = row[0] ? Moji.hira_to_kata(row[0]) : String.new
           writer.write(word, furigana)
-
-          cnt += 1
         end
       end
-
-      cnt
     end
 
     def wikipedia(tagger, writer)
-      cnt = 0
-
       File.open('jawiki-latest-all-titles-in-ns0', encoding: 'euc-jp:utf-8', undef: :replace) do |f|
         CSV.new(f, :col_sep => "\t").each do |row|
           word = row[0]
@@ -64,12 +56,8 @@ module CustomDictionary
           next if tagger.wakati(word).size == 1 # すでに1単語として認識されるものは飛ば
 
           writer.write(word)
-
-          cnt += 1
         end
       end
-
-      cnt
     end
   end
 
@@ -83,13 +71,11 @@ end
 tagger = Igo::Tagger.new('../ipadic')
 writer = CustomDictionary::Writer.new("#{ARGV.first}.csv")
 
-cnt = case ARGV.first
-      when 'hatena'
-        CustomDictionary::hatena(tagger, writer)
-      when 'wikipedia'
-        CustomDictionary::wikipedia(tagger, writer)
-      end
+case ARGV.first
+when 'hatena'
+  CustomDictionary::hatena(tagger, writer)
+when 'wikipedia'
+  CustomDictionary::wikipedia(tagger, writer)
+end
 
 writer.close
-
-puts "#{cnt}件の単語を登録しました"
