@@ -23,7 +23,6 @@ module TwitterBot
     private
 
     def create_markov
-      tweets = Array.new
       CSV.foreach("#{@root}/data/tweets/tweets.csv", :headers => true) do |row|
         t = Tweet.new(row['text'])
         next if t.text.nil?
