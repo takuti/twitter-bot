@@ -5,7 +5,7 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     buftok (0.2.0)
     cookiejar (0.3.3)
-    daemons (1.2.4)
+    daemons (1.2.6)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     em-http-request (1.1.5)
@@ -14,7 +14,7 @@ GEM
       em-socksify (>= 0.3)
       eventmachine (>= 1.0.3)
       http_parser.rb (>= 0.6.0)
-    em-socksify (0.3.1)
+    em-socksify (0.3.2)
       eventmachine (>= 1.0.0.beta.4)
     em-twitter (0.3.5)
       buftok (~> 0.2)
@@ -42,14 +42,24 @@ GEM
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
     moji (1.6)
-    msgpack (1.1.0)
-    multi_json (1.12.2)
+    msgpack (1.2.2)
+    multi_json (1.13.1)
     multipart-post (2.0.0)
+    mustermann (1.0.1)
     naught (1.1.0)
-    public_suffix (3.0.0)
+    public_suffix (3.0.1)
+    rack (2.0.3)
+    rack-protection (2.0.0)
+      rack
     rake (10.4.2)
     simple_oauth (0.3.1)
+    sinatra (2.0.0)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.0)
+      tilt (~> 2.0)
     thread_safe (0.3.6)
+    tilt (2.0.8)
     tweetstream (2.6.1)
       daemons (~> 1.1)
       em-http-request (>= 1.1.1)
@@ -79,6 +89,7 @@ DEPENDENCIES
   kusari (~> 0.2.0)
   moji (~> 1.6.0)
   rake (~> 10.4.2)
+  sinatra (~> 2.0.0)
   tweetstream (~> 2.6.1)
   twitter (~> 5.15.0)
 
@@ -86,4 +97,4 @@ RUBY VERSION
    ruby 2.4.0p0
 
 BUNDLED WITH
-   1.15.1
+   1.16.0.pre.3
