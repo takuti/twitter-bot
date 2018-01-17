@@ -1,11 +1,15 @@
+sudo: required
+
+services:
+  - docker
+
 language: ruby
 
-rvm:
-  - 2.4.0
+before_install:
+  - docker build -t takuti/twitter-bot .
 
 script:
-  - bundle exec rake setup
-  - bundle exec rake
+  - docker run -it takuti/twitter-bot /bin/sh -c "bundle exec rake"
 
 branches:
   only:
