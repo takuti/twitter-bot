@@ -7,9 +7,12 @@ language: ruby
 
 before_install:
   - docker build -t takuti/twitter-bot .
+  - docker run -it -d -p 9292:80 takuti/twitter-bot
+  - docker ps -a
+  - docker run -it takuti/twitter-bot /bin/sh -c "bundle exec rake test"
 
 script:
-  - docker run -it takuti/twitter-bot /bin/sh -c "bundle exec rake test"
+  - curl localhost:9292
 
 branches:
   only:
