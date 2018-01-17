@@ -9,7 +9,7 @@ before_install:
   - docker build -t takuti/twitter-bot .
 
 script:
-  - docker run -it takuti/twitter-bot /bin/sh -c "bundle exec rake"
+  - docker run -it takuti/twitter-bot /bin/sh -c "bundle exec rake test"
 
 branches:
   only:
