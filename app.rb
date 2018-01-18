@@ -1,34 +1,44 @@
-require 'sinatra'
-
+require 'sinatra/base'
+require 'json'
 require 'twitter'
 require_relative 'lib/twitter_bot/tweet_generator'
 
-get '/' do
-  begin
-    TwitterBot::TweetGenerator.new.generate
-  rescue
-    halt 500, 'Failed to generate a tweet. Make sure a directory /ipadic exists.'
-  end
-end
-
-get '/tweet' do
-  begin
-    tweet = TwitterBot::TweetGenerator.new.generate
-  rescue
-    halt 500, 'Failed to generate a tweet. Make sure a directory /ipadic exists.'
+class TwitterBotApi < Sinatra::Base
+  before do
+    content_type :json
   end
 
-  rest = Twitter::REST::Client.new do |config|
-    config.consumer_key = ENV['CONSUMER_KEY']
-    config.consumer_secret = ENV['CONSUMER_SECRET']
-    config.access_token = ENV['OAUTH_TOKEN']
-    config.access_token_secret = ENV['OAUTH_TOKEN_SECRET']
+  after do
+    response.body = JSON.dump(response.body)
   end
 
-  begin
-    rest.update(tweet)
-  rescue
-    halt 500, "Failed to post a generated tweet: #{tweet}"
+  get '/' do
+    begin
+      {tweet: TwitterBot::TweetGenerator.new.generate}
+    rescue
+      halt 500, {error: 'Failed to generate a tweet. Make sure a directory /ipadic exists.'}
+    end
   end
-  "Tweeted: #{tweet}"
+
+  get '/tweet' do
+    begin
+      tweet = TwitterBot::TweetGenerator.new.generate
+    rescue
+      halt 500, {error: 'Failed to generate a tweet. Make sure a directory /ipadic exists.'}
+    end
+
+    rest = Twitter::REST::Client.new do |config|
+      config.consumer_key = ENV['CONSUMER_KEY']
+      config.consumer_secret = ENV['CONSUMER_SECRET']
+      config.access_token = ENV['OAUTH_TOKEN']
+      config.access_token_secret = ENV['OAUTH_TOKEN_SECRET']
+    end
+
+    begin
+      rest.update(tweet)
+    rescue
+      halt 500, {error: "Failed to post a generated tweet: #{tweet}"}
+    end
+    {:success => "Tweeted: #{tweet}"}
+  end
 end
