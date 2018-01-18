@@ -4,6 +4,8 @@ require 'twitter'
 require_relative 'lib/twitter_bot/tweet_generator'
 
 class TwitterBotApi < Sinatra::Base
+  set :protection, :except => [:json_csrf]
+
   before do
     content_type :json
   end
