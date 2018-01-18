@@ -1,4 +1,4 @@
-Markov Chain-based Japanese Twitter Bot
+Markov-Chain-Based Japanese Twitter Bot
 ===
 
 [![Build Status](https://travis-ci.org/takuti/twitter-bot.svg)](https://travis-ci.org/takuti/twitter-bot)
@@ -13,19 +13,16 @@ Markov Chain-based Japanese Twitter Bot
 
 ## Installation
 
-After cloning this repository,
+If you want to host this bot directly on your local or server machine, you first need to install Ruby gems:
 
 	$ gem install bundle
 	$ bundle install
-	$ rake setup
 
-Note that the Markov chain logic is implemented by ***[kusari](https://github.com/takuti/kusari)***, a gem for Japanese Markov chain. The above `rake setup` command will automatically accomplish to create the required dictionary **ipadic/** by following the installation written in [HERE](http://igo.osdn.jp/index.html#usage).
+Note that this application specially depends on [***kusari***](https://github.com/takuti/kusari), a gem for Japanese Markov chain.
 
-To save Twitter API info, we can use [direnv](https://github.com/direnv/direnv), an environmental switcher. It can be installed as:
+Next, you should generate a directory **ipadic/**, the IPA dictionary for Japanese tokenization, as described in the [Igo documentation](http://igo.osdn.jp/index.html#usage).
 
-	$ brew install direnv
-
-After the above command, write `.envrc` file as follows,
+Additionally, in order to connect to a Twitter account, the following environment variables need to be appropriately set:
 
 ```sh
 export SCREEN_NAME=yootakuti
@@ -36,28 +33,26 @@ export OAUTH_TOKEN=hoge
 export OAUTH_TOKEN_SECRET=piyo
 ```
 
-and place it under the project root directory. 
+FYI: we can use [direnv](https://github.com/direnv/direnv) to flexibly configure project-specific environment variables:
 
-Finally,
-
+	$ brew install direnv
+	$ touch .envrc # and write the above `export` statements
 	$ direnv allow
-	
-activates the environment, and posting on Twitter will be available.
 
 ## Usage
 
 Before enjoying this bot, you must download your tweet history from [the Twitter setting page](https://twitter.com/settings/account). The downloaded folder must be placed under **/path/to/twitter-bot/data/**, and the bot will use *text* column of **data/tweets/tweets.csv**. Note that this repository contains [sample tweets.csv file](data/tweets/tweets.csv).
-	
+
 ### Post on Twitter
 
-After setting environment variables with direnv, we can generate and post a markov tweet as:
+After setting the environment variables, we can generate and post a markov tweet as:
 
 	$ ruby lib/post_tweet.rb
-	
+
 If you just want to check if a markov tweet is generated correctly, `dry-run` option is available.
 
 	$ ruby lib/post_tweet.rb dry-run
-	
+
 #### Hourly post by cron
 
 Set your crontab as:
@@ -67,27 +62,62 @@ Set your crontab as:
 
 For more detail of RVM+cron setting: [RVM: Ruby Version Manager - Using Cron with RVM](https://rvm.io/deployment/cron)
 
+#### Build API server
+
+This repository implements a tiny Sinatra-based API server.
+
+Run:
+
+```sh
+$ PORT=9292 bundle exec foreman start
+```
+
+Eventually, http://localhost:9292/ and http://localhost:9292/tweet respectively execute `lib/post_tweet.rb dry-run` and `lib/post_tweet.rb`.
+
+In case that you publicly build this API server, scheduling a request to `/tweet` would be an alternative choice to periodically post Markov-chain-based tweet.
+
 ### Reply daemon
 
-To track tweets which contain bot's SCREEN_NAME and reply all of them:
+`reply_daemon` tracks tweets which contain `SCREEN_NAME` of your bot and replies to all of them:
 
 	$ ruby lib/reply_daemon.rb start
-	
+
 Stop the process:
 
 	$ ruby lib/reply_daemon.rb stop
 
-## TODO
+## Docker
 
-- [x] Improve performance (e.g. store tweets on DB)
-- [ ] Realize more humanlike tweet
-- [x] Implement reply feature
-- [ ] Incorporate streaming API-based tweet generating logic
+You can easily setup this application as a Docker image:
 
-## License
+```sh
+$ docker build -t takuti/twitter-bot
+```
 
-MIT
+Once the image has been created, running the scripts in container is straightforward:
 
-## Author
+```sh
+$ docker run -it takuti/twitter-bot /bin/sh -c "ruby lib/post_tweet.rb"
+$ docker run -it takuti/twitter-bot /bin/sh -c "ruby lib/post_tweet.rb dry-run"
+```
 
-[takuti](http://github.com/takuti)
+By default, container automatically launches the API sever on port 80, so you can get access to http://localhost:9292/ once a container started running:
+
+```sh
+$ docker run -it -d -p 9292:80 takuti/twitter-bot
+```
+
+Notice that, as long as the required environmental variables are properly set in container, http://localhost:9292/tweet also works as we expected.
+
+## Heroku application
+
+Our Docker image enables us to make the API server public on Heroku:
+
+```sh
+$ heroku create takuti-twitter-bot
+$ heroku container:push web
+```
+
+See https://takuti-twitter-bot.herokuapp.com/, for example.
+
+While https://takuti-twitter-bot.herokuapp.com/tweet currently returns an error, you can make it available by [configuration of variables](https://devcenter.heroku.com/articles/config-vars#setting-up-config-vars-for-a-deployed-application).
