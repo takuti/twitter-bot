@@ -109,7 +109,7 @@ $ docker run -it -d -p 5000:5000 takuti/twitter-bot
 
 Notice that, as long as the required environmental variables are properly set in container, http://localhost:5000/tweet also works as we expected.
 
-## Heroku application
+### Deploy on Heroku
 
 Our Docker image enables us to make the API server public on Heroku:
 
@@ -121,3 +121,26 @@ $ heroku container:push web
 See https://takuti-twitter-bot.herokuapp.com/, for example.
 
 While https://takuti-twitter-bot.herokuapp.com/tweet currently returns an error, you can make it available by [configuration of variables](https://devcenter.heroku.com/articles/config-vars#setting-up-config-vars-for-a-deployed-application).
+
+### Deploy on Dokku
+
+[Dokku](https://github.com/dokku/dokku) is a Docker-powered OSS PaaS which enables you to build mini-Heroku-like platform on your own server. Similarly to the deployment on Heroku, once you have set up a server with Dokku, the API server can be easily deployed as a Docker image.
+
+Server:
+
+```sh
+$ dokku apps:create twitter-bot
+$ dokku config:set twitter-bot DOKKU_DOCKERFILE_START_CMD="bundle exec foreman start"
+```
+
+Note that setting a way to start running a container to `DOKKU_DOCKERFILE_START_CMD` is important, because Dokku directly [executes a task defined as the `web` process in `Procfile`](http://dokku.viewdocs.io/dokku/deployment/methods/dockerfiles/#procfiles-and-multiple-processes) by default. Consequently, your container launches differently from what `CMD` defines in `Dockerfile`.
+
+Local:
+
+```sh
+$ cd /path/to/takuti/twitter-bot
+$ git remote add dokku dokku@dokku.example.com:twitter-bot
+$ git push dokku master
+```
+
+Eventually, an "Application deployed" message shows up on your local screen with corresponding URL, and you can get access to the API server.
