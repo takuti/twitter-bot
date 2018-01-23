@@ -1,7 +1,6 @@
 FROM ruby:2.5.0-alpine
 
 ENV APP_ROOT='/src/github.com/takuti/twitter-bot'
-ENV PORT=80
 
 ADD . ${APP_ROOT}
 WORKDIR ${APP_ROOT}
@@ -17,5 +16,4 @@ RUN apk update && \
   bundle install && \
   apk del .builddeps
 
-EXPOSE $PORT
 CMD ["bundle", "exec", "foreman", "start"]

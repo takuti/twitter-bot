@@ -69,10 +69,10 @@ This repository implements a tiny Sinatra-based API server.
 Run:
 
 ```sh
-$ PORT=9292 bundle exec foreman start
+$ bundle exec foreman start # PORT=5000 by default
 ```
 
-Eventually, http://localhost:9292/ and http://localhost:9292/tweet respectively execute `lib/post_tweet.rb dry-run` and `lib/post_tweet.rb`.
+Eventually, http://localhost:5000/ and http://localhost:5000/tweet respectively execute `lib/post_tweet.rb dry-run` and `lib/post_tweet.rb`.
 
 In case that you publicly build this API server, scheduling a request to `/tweet` would be an alternative choice to periodically post Markov-chain-based tweet.
 
@@ -101,13 +101,13 @@ $ docker run -it takuti/twitter-bot /bin/sh -c "ruby lib/post_tweet.rb"
 $ docker run -it takuti/twitter-bot /bin/sh -c "ruby lib/post_tweet.rb dry-run"
 ```
 
-By default, container automatically launches the API sever on port 80, so you can get access to http://localhost:9292/ once a container started running:
+By default, container automatically launches the API sever on port 5000 via `bundle exec foreman start`, so you can get access to http://localhost:5000/ once a container started running:
 
 ```sh
-$ docker run -it -d -p 9292:80 takuti/twitter-bot
+$ docker run -it -d -p 5000:5000 takuti/twitter-bot
 ```
 
-Notice that, as long as the required environmental variables are properly set in container, http://localhost:9292/tweet also works as we expected.
+Notice that, as long as the required environmental variables are properly set in container, http://localhost:5000/tweet also works as we expected.
 
 ## Heroku application
 
